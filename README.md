@@ -1,6 +1,12 @@
-# Getting Started with Create React App
+# Fully functional Hotel UI React Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is the ReactJS frontend of a Hotel Booking Project. I will provide link to the complete project (Frontend-ReactJS and Backend-NodeJS).
+
+# Screenshot
+![alt text](https://github.com/ogbodotg/hotel/blob/react-mini/screenshots/Screenshot%202022-09-09%20at%204.37.55%20PM.png?raw=true)
+![alt text](https://github.com/ogbodotg/hotel/blob/react-mini/screenshots/Screenshot%202022-09-09%20at%204.39.46%20PM.png?raw=true)
+![alt text](https://github.com/ogbodotg/hotel/blob/react-mini/screenshots/Screenshot%202022-09-09%20at%204.43.48%20PM.png?raw=true)
+
 
 ## Available Scripts
 
