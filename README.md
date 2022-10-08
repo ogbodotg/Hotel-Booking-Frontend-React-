@@ -1,6 +1,6 @@
 # Fully functional Hotel UI React Frontend
 
-This is the ReactJS frontend of a Hotel Booking Project. I will provide link to the complete project (Frontend-ReactJS and Backend-NodeJS).
+This is the ReactJS frontend of a Hotel Booking Project. Here's link to the Hotel Booking App Backend built in NodeJS, MongoDB, and Express => https://github.com/ogbodotg/Hotel-Booking-App-API.
 
 # Screenshot
 ![alt text](https://github.com/ogbodotg/hotel/blob/react-mini/screenshots/Screenshot%202022-09-09%20at%204.37.55%20PM.png?raw=true)
