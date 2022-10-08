@@ -1,0 +1,79 @@
+.reserve{
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.408);
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.reservationContainer{
+    background-color: white;
+    padding: 20px;
+    position: relative;
+}
+
+.close{
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+}
+
+.reservationItem{
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    padding: 10px;
+}
+
+.reservationInfo{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.title{
+    font-weight: 500;
+}
+
+.description{
+    font-weight: 300;
+}
+
+.maximumPeople{
+    font-weight: 12px;
+}
+.price{
+    font-weight: 500;
+}
+
+.selectRoom{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    font-size: 8px;
+    color: gray;
+}
+
+.room{
+    display: flex;
+    flex-direction: column;
+}
+
+.reservationBtn{
+    border: none;
+    padding: 10px 20px;
+    background-color: orangered;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 20px;
+    width: 100%;
+    margin-top: 20px;
+}
+

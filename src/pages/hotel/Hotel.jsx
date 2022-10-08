@@ -1,114 +1,156 @@
-import './hotel.css'
-import Header from '../../components/header/Header'
-import Navbar from '../../components/navbar/Navbar'
-import Footer from '../../components/footer/Footer'
-import Bottom from '../../components/bottom/Bottom'
-import { useState } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleArrowLeft, faCircleArrowRight, faLocationDot } from '@fortawesome/free-solid-svg-icons'
-import { faCircleXmark } from '@fortawesome/free-regular-svg-icons'
+import "./hotel.css";
+import Header from "../../components/header/Header";
+import Navbar from "../../components/navbar/Navbar";
+import Footer from "../../components/footer/Footer";
+import Bottom from "../../components/bottom/Bottom";
+import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCircleArrowLeft,
+  faCircleArrowRight,
+  faLocationDot,
+} from "@fortawesome/free-solid-svg-icons";
+import { faCircleXmark } from "@fortawesome/free-regular-svg-icons";
+import { useLocation, useNavigate } from "react-router-dom";
+import useFetch from "../../hooks/fetch";
+import { useContext } from "react";
+import { SearchContext } from "../../contextAPI/SearchContext";
+import { AuthContext } from "../../contextAPI/AuthContext";
+import { Reserve } from "../../components/reserve/Reservation";
 
 const Hotel = () => {
+  const location = useLocation();
+  const hotelId = location.pathname.split("/")[2];
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
+  const [openPage, setOpenPage] = useState(false);
 
-  const photos = [
-    {
-       src:"https://i2.wp.com/www.momoafrica.com/wp-content/uploads/2017/05/Giraffe-Manor.jpg?fit=900%2C600&ssl=1"
-    },
-    {
-      src:"https://cdn.pmnewsnigeria.com/2020/08/Obudu-Ranch-Resort-good-for-honey-mooners-.jpg"
-    },
-    {
-      src:"https://cdn2.hubspot.net/hubfs/439788/Blog/Featured%20Images/Best%20Hotel%20Website%20Designs.jpg"
-    },
-    {
-      src:"https://i2.wp.com/www.momoafrica.com/wp-content/uploads/2017/05/Giraffe-Manor.jpg?fit=900%2C600&ssl=1"
-    },
-    {
-      src:"https://imgcy.trivago.com/c_lfill,d_dummy.jpeg,e_sharpen:60,f_auto,h_450,q_auto,w_450/itemimages/96/95/96959_v6.jpeg"
-    },
-    {
-      src:"https://www.gannett-cdn.com/-mm-/05b227ad5b8ad4e9dcb53af4f31d7fbdb7fa901b/c=0-64-2119-1259/local/-/media/USATODAY/USATODAY/2014/08/13/1407953244000-177513283.jpg"
-    }
-  ]
-  
+
+  const { data, loading, error, reFetchData } = useFetch(
+    `http://localhost:8000/api/hotels/get/${hotelId}`
+  );
+
+
+  const { dates, bookings } = useContext(SearchContext);
+  const { user } = useContext(AuthContext)
+  const navigate = useNavigate()
+
+  const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
+  function dayDifference(date1, date2) {
+    const timeDiff = Math.abs(date2.getTime() - date1.getTime());
+    const diffDays = Math.ceil(timeDiff / MILLISECONDS_PER_DAY);
+    return diffDays;
+  }
+
+  const days = dayDifference(dates[0].endDate, dates[0].startDate);
+
   const handleOpen = (i) => {
     setSlideNumber(i);
     setOpen(true);
-
-  }
+  };
 
   const handleSlide = (direction) => {
     let newSlideNumber;
     if (direction === "l") {
-      newSlideNumber = slideNumber===0?5:slideNumber-1
+      newSlideNumber = slideNumber === 0 ? 5 : slideNumber - 1;
     } else {
-      newSlideNumber = slideNumber === 5 ? 0 : slideNumber+1
+      newSlideNumber = slideNumber === 5 ? 0 : slideNumber + 1;
     }
-    setSlideNumber(newSlideNumber)
+    setSlideNumber(newSlideNumber);
+  };
+
+  const handleClick = () => {
+    if (user) {
+      setOpenPage(true)
+    } else {
+      navigate("/login")
+    }
   }
   return (
     <div>
-      <Navbar/>
+      <Navbar />
       <Header type="list" />
-      <div className="hotelContainer">
-        {open && <div className="slider">
-        <FontAwesomeIcon icon={faCircleXmark} className="closeImg" onClick={()=>setOpen(false)}/>
-          <FontAwesomeIcon icon={faCircleArrowLeft} className="arrow" onClick={()=>handleSlide('l')}/>
-          <div className="sliderWrapper">
-            <img src={photos[slideNumber].src} alt="" className="sliderImg" />
-          </div>
-          <FontAwesomeIcon icon={faCircleArrowRight} className="arrow" onClick={() => handleSlide('r')} />
-          
-        </div>}
-        <div className="hotelWrapper">
-          <button className="bookNow">Book a Space</button>
-          <h1 className="hotelTitle">
-            Transcrop Hilton
-          </h1>
-          <div className="hotelAddress">
-            <FontAwesomeIcon icon={faLocationDot} />
-            <span>123 Obudu Cattle Street</span>
-          </div>
-          <span className='hotelDistance'>Just 120m away from Train Station</span>
+      {loading ? (
+        "Please hold on..."
+      ) : (
+        <div className="hotelContainer">
+          {open && (
+            <div className="slider">
+              <FontAwesomeIcon
+                icon={faCircleXmark}
+                className="closeImg"
+                onClick={() => setOpen(false)}
+              />
+              <FontAwesomeIcon
+                icon={faCircleArrowLeft}
+                className="arrow"
+                onClick={() => handleSlide("l")}
+              />
+              <div className="sliderWrapper">
+                <img
+                  src={data?.photos[slideNumber]}
+                  alt=""
+                  className="sliderImg"
+                />
+              </div>
+              <FontAwesomeIcon
+                icon={faCircleArrowRight}
+                className="arrow"
+                onClick={() => handleSlide("r")}
+              />
+            </div>
+          )}
+          <div className="hotelWrapper">
+            <button className="bookNow">Book a Space</button>
+            <h1 className="hotelTitle">{data.name}</h1>
+            <div className="hotelAddress">
+              <FontAwesomeIcon icon={faLocationDot} />
+              <span>{data.address}</span>
+            </div>
+            <span className="hotelDistance">
+              Just 2km away from Train Station
+            </span>
 
-          <span className='hotelPriceDiscount'>Book for a stay and get first day stay meal for free</span>
-          
+            <span className="hotelPriceDiscount">
+              Book for a stay from {data.lowCost} at {data.name} and get first
+              day stay meal for free
+            </span>
+
             <div className="hotelImages">
-              {photos.map((photo, index) => (
+              {data.photos?.map((photo, index) => (
                 <div className="hotelImgWrapper">
-                  <img onClick={()=>handleOpen(index)} src={photo.src} alt="" className='hotelImg'/>
-                  </div>
-                ))}
+                  <img
+                    onClick={() => handleOpen(index)}
+                    src={photo}
+                    alt=""
+                    className="hotelImg"
+                  />
+                </div>
+              ))}
             </div>
             <div className="hotelDetails">
               <div className="hotelDetailText">
-                <h1 className="hotelTitle"> Transcorp Hilton</h1>
-                  <p className='hotelDesc'>
-                  Here are the latest jobs we’ve selected just for you. If you’re interested, apply now!
-                  Here are the latest jobs we’ve selected just for you. If you’re interested, apply now!
-                  Here are the latest jobs we’ve selected just for you. If you’re interested, apply now!
-                  Here are the latest jobs we’ve selected just for you. If you’re interested, apply now!
-                  Here are the latest jobs we’ve selected just for you. If you’re interested, apply now!
-                  </p>
+                <h1 className="hotelTitle"> {data.name}</h1>
+                <p className="hotelDesc">{data.description}</p>
               </div>
               <div className="hotelDetailPrice">
-                <h1>7 days stay, get 3 days free</h1>
+                <h1>{days} days of amazing experience</h1>
                 <span>Transcrop Hilton located in the heart of Crossriver</span>
                 <h2>
-                  <b>NGN89000</b> (7 nights)
+                  <b>NGN{days * data.lowCost * bookings.room}</b> ({days}{" "}
+                  nights)
                 </h2>
-                <button>Book Now</button>
+                <button onClick={handleClick}>Book Now</button>
               </div>
             </div>
+          </div>
+          <Bottom />
+          <Footer />
         </div>
-        <Bottom />
-        <Footer/>
-      </div>
+      )}
+      {openPage && <Reserve setOpenPage={setOpenPage} hotelId={hotelId} />}
     </div>
+  );
+};
 
-  )
-}
-
-export default Hotel
+export default Hotel;

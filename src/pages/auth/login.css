@@ -1,0 +1,22 @@
+.loginContainer{
+    
+}
+.loginInput{
+    height: 30px;
+    padding: 10px;
+}
+
+.loginBtn{
+    border: none;
+    padding: 10px 20px;
+    background-color: orangered;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 20px;
+}
+
+.loginBtn:disabled{
+    background-color: gray;
+    cursor: not-allowed;
+}

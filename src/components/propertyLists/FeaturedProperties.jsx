@@ -1,38 +1,26 @@
+import useFetch from '../../hooks/fetch';
 import './featuredProperties.css'
 
 export const FeaturedProperties = () => {
+    const { data, loading, error } = useFetch("http://localhost:8000/api/hotels?featured=true&limit=3");
+
   return (
       <div className="fplist">
-          <div className="fpItem">
-              <img src="https://i2.wp.com/www.momoafrica.com/wp-content/uploads/2017/05/Giraffe-Manor.jpg?fit=900%2C600&ssl=1" alt="" className='fpImg'/>
-              <span className='fpName'>Yankari Nature Hotels</span>
-              <span className='fpCity'>Bauchi</span>
-              <span className='fpPrice'>NGN7500 ($5)</span>
-              <div className='fpRating'>
-                  <button>4.8</button>
-                  <span>Excellent</span>
+          {loading ?( "Please hold on...") : (<>
+              {data.map(item => (
+                  <div className="fpItem" key={item?._id}>
+                  <img src={item?.photos[0]} alt="" className='fpImg' />
+                  <span className='fpName'>{item?.name}</span>
+                  <span className='fpCity'>{item?.city}</span>
+                  <span className='fpPrice'>{item?.lowPrice}</span>
+                  {item?.rating && <div className='fpRating'>
+                          <button>{item?.rating}</button>
+                      <span>Excellent</span>
+                  </div>}
               </div>
-          </div>
-          <div className="fpItem">
-              <img src="https://i2.wp.com/www.momoafrica.com/wp-content/uploads/2017/05/Giraffe-Manor.jpg?fit=900%2C600&ssl=1" alt="" className='fpImg'/>
-              <span className='fpName'>Yankari Nature Hotels</span>
-              <span className='fpCity'>Bauchi</span>
-              <span className='fpPrice'>NGN7500 ($5)</span>
-              <div className='fpRating'>
-                  <button>4.8</button>
-                  <span>Excellent</span>
-              </div>
-          </div>
-          <div className="fpItem">
-              <img src="https://i2.wp.com/www.momoafrica.com/wp-content/uploads/2017/05/Giraffe-Manor.jpg?fit=900%2C600&ssl=1" alt="" className='fpImg'/>
-              <span className='fpName'>Yankari Nature Hotels</span>
-              <span className='fpCity'>Bauchi</span>
-              <span className='fpPrice'>NGN7500 ($5)</span>
-              <div className='fpRating'>
-                  <button>4.8</button>
-                  <span>Excellent</span>
-              </div>
-          </div>
+              ))}
+          </>)}
+         
     </div>
   )
 }
